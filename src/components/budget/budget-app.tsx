@@ -524,23 +524,107 @@ export function BudgetApp() {
       </section>
 
       <section className="panel">
-        <h2 className="text-lg font-semibold">{t(lang, "settings")}</h2>
-        <p className="mt-2 text-sm text-muted">{t(lang, "eraseBody")}</p>
-        <button
-          type="button"
-          className="btn btn-danger mt-4"
-          onClick={() =>
-            ask({
-              title: t(lang, "eraseAsk"),
-              body: t(lang, "eraseBody"),
-              confirmLabel: t(lang, "confirmErase"),
-              run: () => eraseAll(),
-            })
-          }
-        >
-          {t(lang, "eraseAll")}
-        </button>
-      </section>
+  <h2 className="text-lg font-semibold">{t(lang, "settings")}</h2>
+  <p className="mt-2 text-sm text-muted">{t(lang, "eraseBody")}</p>
+
+  <div className="mt-4 grid grid-cols-2 gap-2">
+    <button
+      type="button"
+      className="btn btn-ghost"
+      onClick={() => {
+        const state = useBudget.getState();
+        const backup = {
+          version: 1,
+          exportedAt: new Date().toISOString(),
+          app: "ledger-app",
+          lang: state.lang,
+          currency: state.currency,
+          categories: state.categories,
+          transactions: state.transactions,
+          goals: state.goals,
+        };
+        const blob = new Blob([JSON.stringify(backup, null, 2)], {
+          type: "application/json",
+        });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        const date = new Date().toISOString().slice(0, 10);
+        a.href = url;
+        a.download = `ledger-backup-${date}.json`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+      }}
+    >
+      Export Data
+    </button>
+
+    <label className="btn btn-ghost">
+      Import Data
+      <input
+        type="file"
+        accept="application/json,.json"
+        className="sr-only"
+        onChange={(event) => {
+          const file = event.target.files?.[0];
+          if (!file) return;
+          const reader = new FileReader();
+          reader.onload = () => {
+            try {
+              const data = JSON.parse(String(reader.result));
+              if (!data || typeof data !== "object") throw new Error("bad");
+              if (
+                !Array.isArray(data.categories) ||
+                !Array.isArray(data.transactions) ||
+                !Array.isArray(data.goals)
+              ) {
+                throw new Error("bad structure");
+              }
+              ask({
+                title: "Import backup?",
+                body: "This will replace your current data with the backup file.",
+                confirmLabel: "Import",
+                run: () => {
+                  useBudget.setState({
+                    lang: data.lang ?? "si",
+                    currency: data.currency ?? "LKR",
+                    categories: data.categories,
+                    transactions: data.transactions,
+                    goals: data.goals,
+                  });
+                },
+              });
+            } catch {
+              alert("Invalid backup file.");
+            }
+          };
+          reader.readAsText(file);
+          event.target.value = "";
+        }}
+      />
+    </label>
+  </div>
+
+  <p className="mt-2 text-xs text-muted">
+    Export කරලා Google Drive එකට save කරගන්න. Phone එක repair වුණත් data ආරක්ෂිතයි.
+  </p>
+
+  <button
+    type="button"
+    className="btn btn-danger mt-4"
+    onClick={() =>
+      ask({
+        title: t(lang, "eraseAsk"),
+        body: t(lang, "eraseBody"),
+        confirmLabel: t(lang, "confirmErase"),
+        run: () => eraseAll(),
+      })
+    }
+  >
+    {t(lang, "eraseAll")}
+  </button>
+</section>
 
       {entry ? (
         <EntryDialog
