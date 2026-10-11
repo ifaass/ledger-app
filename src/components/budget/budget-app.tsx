@@ -624,7 +624,7 @@ export function BudgetApp() {
   >
     {t(lang, "eraseAll")}
   </button>
-</section>
+      </section>
 
       {entry ? (
         <EntryDialog
