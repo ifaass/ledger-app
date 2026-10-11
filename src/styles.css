@@ -1,0 +1,274 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "Noto Sans", "Noto Sans Sinhala", "Noto Sans Tamil", system-ui, sans-serif;
+  --color-paper: #f3f1ec;
+  --color-surface: #fffcf8;
+  --color-surface-2: #ece8e1;
+  --color-ink: #1c1915;
+  --color-muted: #5f5a53;
+  --color-faint: #8a847c;
+  --color-line: #e3ded4;
+  --color-line-strong: #cfc8bc;
+  --color-accent: #1e3340;
+  --color-accent-fg: #f6f4ef;
+  --color-in: #1b6b43;
+  --color-out: #9d3418;
+  --color-track: #e6e1d8;
+  --radius-control: 8px;
+  --radius-card: 28px;
+  --shadow-panel: 0 1px 2px rgb(28 25 21 / 0.04), 0 12px 32px rgb(28 25 21 / 0.05);
+}
+
+@layer base {
+  html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+  }
+
+  body {
+    margin: 0;
+    min-height: 100vh;
+    overflow-x: clip;
+    background: var(--color-paper);
+    color: var(--color-ink);
+    font-family: var(--font-sans);
+    line-height: 1.5;
+  }
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
+
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
+
+  input,
+  select,
+  textarea {
+    font: inherit;
+    color: inherit;
+  }
+}
+
+.nums {
+  font-variant-numeric: tabular-nums;
+}
+
+.money-hero {
+  font-size: clamp(1.75rem, 2.4vw + 1.1rem, 3rem);
+  line-height: 1.1;
+  letter-spacing: -0.03em;
+  overflow-wrap: anywhere;
+}
+
+.panel {
+  background: var(--color-surface);
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-card);
+  padding: 1.25rem;
+  box-shadow: var(--shadow-panel);
+}
+
+.field {
+  height: 2.75rem;
+  width: 100%;
+  border-radius: var(--radius-control);
+  border: 1px solid var(--color-line-strong);
+  background: var(--color-surface);
+  padding-inline: 0.75rem;
+  color: var(--color-ink);
+}
+
+textarea.field {
+  height: auto;
+  min-height: 5.5rem;
+  padding-block: 0.75rem;
+  resize: vertical;
+}
+
+.field:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  min-height: 2.75rem;
+  padding-inline: 1rem;
+  border-radius: var(--radius-control);
+  border: 1px solid transparent;
+  background: transparent;
+  font-weight: 600;
+  line-height: 1.25;
+  text-align: center;
+  transition:
+    transform 150ms cubic-bezier(0.22, 1, 0.36, 1),
+    background-color 150ms cubic-bezier(0.22, 1, 0.36, 1),
+    opacity 150ms linear;
+}
+
+.btn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.btn:disabled {
+  opacity: 0.4;
+}
+
+.btn-primary {
+  background: var(--color-accent);
+  color: var(--color-accent-fg);
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: color-mix(in oklab, var(--color-accent) 86%, white);
+}
+
+.btn-ghost {
+  background: var(--color-surface);
+  color: var(--color-ink);
+  border-color: var(--color-line-strong);
+}
+
+.btn-ghost:hover:not(:disabled) {
+  background: var(--color-surface-2);
+}
+
+.btn-danger {
+  background: var(--color-surface);
+  color: var(--color-out);
+  border-color: color-mix(in oklab, var(--color-out) 40%, var(--color-line));
+}
+
+.btn-danger:hover:not(:disabled) {
+  background: color-mix(in oklab, var(--color-out) 8%, var(--color-surface));
+}
+
+.btn-quiet {
+  min-width: 2.75rem;
+  padding-inline: 0.5rem;
+  color: var(--color-muted);
+  background: transparent;
+}
+
+.btn-quiet:hover:not(:disabled) {
+  background: var(--color-surface-2);
+  color: var(--color-ink);
+}
+
+.seg {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px;
+  padding: 4px;
+  border-radius: 12px;
+  border: 1px solid var(--color-line);
+  background: var(--color-surface-2);
+}
+
+.seg button {
+  min-height: 2.75rem;
+  flex: 1 1 auto;
+  border: 0;
+  border-radius: 8px;
+  background: transparent;
+  padding-inline: 0.75rem;
+  font-weight: 600;
+  color: var(--color-muted);
+}
+
+.seg button[aria-pressed="true"] {
+  background: var(--color-surface);
+  color: var(--color-ink);
+  box-shadow: 0 1px 2px rgb(28 25 21 / 0.06);
+}
+
+.seg button:focus-visible {
+  outline: 2px solid var(--color-accent);
+  outline-offset: 2px;
+}
+
+.track {
+  height: 8px;
+  overflow: hidden;
+  border-radius: 999px;
+  background: var(--color-track);
+}
+
+.track > span {
+  display: block;
+  height: 100%;
+  border-radius: 999px;
+  background: var(--color-accent);
+}
+
+.modal-panel {
+  position: fixed;
+  z-index: 50;
+  right: 0.75rem;
+  bottom: 0.75rem;
+  left: 0.75rem;
+  max-height: min(85vh, 40rem);
+  overflow-y: auto;
+  border: 1px solid var(--color-line);
+  border-radius: var(--radius-card);
+  background: var(--color-surface);
+  padding: 1.25rem;
+  box-shadow: var(--shadow-panel);
+  outline: none;
+}
+
+@media (min-width: 640px) {
+  .modal-panel {
+    top: 50%;
+    right: auto;
+    bottom: auto;
+    left: 50%;
+    width: min(32rem, calc(100% - 2rem));
+    transform: translate(-50%, -50%);
+  }
+}
+
+.fade-in {
+  animation: fade-in 250ms cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .btn:active:not(:disabled) {
+    transform: none;
+  }
+}
